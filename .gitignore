@@ -1,0 +1,8 @@
+*.env
+*.vscode
+*.json
+!questions.json
+__pycache__
+*.txt
+
+*.zip
