@@ -88,7 +88,7 @@ def main():
     logger.setLevel(logging.INFO)
     logger.addHandler(TelegramBotLogsHandler())
     try:
-        updater = Updater(token=os.getenv('TELEGRAM_TOKEN'))
+        updater = Updater(token=os.environ['TELEGRAM_TOKEN'])
 
         dp = updater.dispatcher
 

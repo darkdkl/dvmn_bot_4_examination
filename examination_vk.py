@@ -63,7 +63,7 @@ def main(vk_api):
     logger.addHandler(TelegramBotLogsHandler())
 
     try:
-        vk_session = vk_api.VkApi(token=os.getenv('VK_TOKEN'))
+        vk_session = vk_api.VkApi(token=os.environ['VK_TOKEN'])
         vk_api = vk_session.get_api()
         longpoll = VkLongPoll(vk_session)
         keyboard = VkKeyboard(one_time=False)
