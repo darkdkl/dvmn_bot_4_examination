@@ -9,14 +9,14 @@ from log_to_tgm import TelegramBotLogsHandler
 import logging
 
 
-NEW_QUESTION, GREAT_ANSWER, ATTEMP_TO_ANSWER, LUSER = range(4)
+NEW_QUESTION, ATTEMP_TO_ANSWER = range(2)
 
 
 redisbase = redis_connect()
 
 
 def start(bot, update):
-    text = ''' Приветствуем !!!
+    text = ''' Приветствую !!!
     Нажмите "Новый вопрос" для начала викторины.
     /cancel -для отмены
     
@@ -60,7 +60,7 @@ def handle_solution_attempt(bot, update):
     return ATTEMP_TO_ANSWER
 
 
-def luser(bot, update):
+def help_luser(bot, update):
     
     bot.send_message(chat_id=update.message.chat_id,
                      text='Вот тебе правильный ответ: '+str(redisbase.get(update.message.chat.username), 'utf-8') +
@@ -76,7 +76,7 @@ def cancel(bot, update):
     return ConversationHandler.END
 
 
-def user_score(bot, update):
+def get_user_score(bot, update):
 
     bot.send_message(chat_id=update.message.chat_id,
                      text='Ваши очки')
@@ -99,7 +99,7 @@ def main():
 
                 NEW_QUESTION: [RegexHandler('^Новый вопрос$', handle_new_question_request)],
 
-                ATTEMP_TO_ANSWER: [RegexHandler('^Сдаться$', luser), RegexHandler('^Мой счет$', user_score, pass_user_data=True),
+                ATTEMP_TO_ANSWER: [RegexHandler('^Сдаться$', help_luser), RegexHandler('^Мой счет$', get_user_score, pass_user_data=True),
                                 MessageHandler(Filters.text, handle_solution_attempt)]},
             fallbacks=[CommandHandler('cancel', cancel)]
         )
