@@ -25,6 +25,7 @@ def send_message(event, message, keyboard, vk_api):
 def start(event, vk_api, keyboard):
     hello = 'Приветствуем тебя в нашей викторине'
     send_message(event, hello, keyboard, vk_api)
+    redisbase.set(str(event.user_id)+'starting','True')
 
 
 def handle_new_question_request(event, vk_api, keyboard):
