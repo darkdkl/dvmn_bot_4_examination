@@ -4,7 +4,7 @@ from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters, Rege
                           ConversationHandler)
 import redis
 from redis_base import redis_connect
-from prepare_text import prepare_tests, prepare_answer
+from prepare_text import get_random_questions_and_answers, prepare_answer
 from log_to_tgm import TelegramBotLogsHandler
 import logging
 
@@ -32,7 +32,7 @@ def start(bot, update):
 
 def handle_new_question_request(bot, update):
 
-    text_of_task = prepare_tests()[0]
+    text_of_task = get_random_questions_and_answers()[0]
     message = text_of_task[0]
     answer = text_of_task[1]
 
@@ -61,17 +61,16 @@ def handle_solution_attempt(bot, update):
 
 
 def help_luser(bot, update):
-    
+    right_answer=str(redisbase.get(update.message.chat.username), 'utf-8')
     bot.send_message(chat_id=update.message.chat_id,
-                     text='Вот тебе правильный ответ: '+str(redisbase.get(update.message.chat.username), 'utf-8') +
-                     '\n Что бы продолжить нажми "Новый вопрос"')
+                     text=f'Вот тебе правильный ответ:{right_answer}\n Что бы продолжить нажми "Новый вопрос"')
 
     return NEW_QUESTION
 
 
 def cancel(bot, update):
     bot.send_message(chat_id=update.message.chat_id,
-                     text='Команда заврешения работы викторины')
+                     text='Команда завершения работы викторины')
     redisbase.delete(update.message.chat.username)
     return ConversationHandler.END
 
